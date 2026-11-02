@@ -23,7 +23,8 @@ export const auth = betterAuth({
   },
   advanced: {
     database: { generateId: "uuid" },
-    useSecureCookies: process.env.NODE_ENV === "production",
+    // Cookie Secure hanya bila situs diakses lewat https; di http (mode IP:port) browser akan membuangnya.
+    useSecureCookies: process.env.NODE_ENV === "production" && (process.env.BETTER_AUTH_URL ?? "").startsWith("https://"),
   },
   // Batasi percobaan login (penyimpanan memori cukup untuk satu instance).
   rateLimit: {
