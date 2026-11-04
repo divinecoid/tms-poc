@@ -18,6 +18,7 @@ export function Sidebar({ user }: { user: { name: string; role: Role } }) {
   const operations = [
     can(user.role, "read", "orders") && { href: "/orders", label: "Order", icon: "orders" },
     can(user.role, "read", "dispatch") && { href: "/dispatch", label: "Dispatch", icon: "dispatch" },
+    can(user.role, "read", "dispatch") && { href: "/tracking", label: "Tracking armada", icon: "tracking" },
   ].filter(Boolean) as { href: string; label: string; icon: string }[];
   const finance = [
     can(user.role, "read", "invoices") && { href: "/invoices", label: "Invoice", icon: "invoices" },
