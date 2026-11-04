@@ -148,4 +148,6 @@
 .tms-popup-row { display: flex; justify-content: space-between; gap: 12px; }
 .tms-popup-row span { color: #64748b; }
 .tms-popup-row b { font-weight: 600; text-align: right; }
+.tms-popup-alert { display: block; margin-top: 8px; padding-top: 8px; border-top: 1px solid #e2e8f0; color: #dc2626; font-weight: 600; text-decoration: none; }
+.tms-popup-alert:hover { text-decoration: underline; }
 .leaflet-container { font-family: inherit; }

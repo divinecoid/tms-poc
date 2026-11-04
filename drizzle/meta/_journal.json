@@ -29,6 +29,13 @@
       "when": 1793618676419,
       "tag": "0003_abandoned_gargoyle",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793810084488,
+      "tag": "0004_same_selene",
+      "breakpoints": true
     }
   ]
 }

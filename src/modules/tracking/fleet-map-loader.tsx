@@ -9,6 +9,6 @@ const FleetMap = dynamic(() => import("./fleet-map").then((m) => m.FleetMap), {
   loading: () => <div className="bg-muted/40 h-full min-h-[560px] animate-pulse rounded-xl border" />,
 });
 
-export function FleetMapLoader({ initial }: { initial: FleetSnapshot }) {
-  return <FleetMap initial={initial} />;
+export function FleetMapLoader({ initial, focusId }: { initial: FleetSnapshot; focusId?: string }) {
+  return <FleetMap initial={initial} focusId={focusId} />;
 }

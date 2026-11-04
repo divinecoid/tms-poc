@@ -359,3 +359,12 @@ export const docCounters = pgTable("doc_counters", {
   key: text("key").primaryKey(),
   value: integer("value").notNull().default(0),
 });
+
+/** Hasil tinjauan atas peringatan BBM. Peringatan dihitung dari data sensor; hanya keputusan manusia yang disimpan di sini. */
+export const fuelEventReviews = pgTable("fuel_event_reviews", {
+  eventKey: text("event_key").primaryKey(), // unit:tipe:waktu, stabil antar perhitungan ulang
+  status: text("status").notNull(), // REVIEWING | CONFIRMED | DISMISSED
+  note: text("note"),
+  reviewedBy: uuid("reviewed_by").references(() => users.id),
+  reviewedAt: timestamp("reviewed_at", { withTimezone: true }).notNull().defaultNow(),
+});

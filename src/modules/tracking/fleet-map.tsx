@@ -2,7 +2,7 @@
 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { CircleCheck, Gauge, LocateFixed, Radio, Search, Truck } from "lucide-react";
+import { CircleCheck, Fuel, Gauge, LocateFixed, Radio, Search, Truck } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { FleetSnapshot, FleetUnit, UnitStatus } from "./demo-fleet";
@@ -45,6 +45,7 @@ function popupNode(u: FleetUnit) {
     ["Muatan", u.cargo],
     ["Update", new Date(u.lastUpdate).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", second: "2-digit", timeZone: "Asia/Jakarta" }) + " WIB"],
   ];
+  if (u.fuel) rows.splice(2, 0, ["BBM", `${u.fuel.pct}% (${u.fuel.liters} L)`]);
   const title = document.createElement("div");
   title.className = "tms-popup-title";
   title.textContent = `${u.plate} · ${u.vehicleType}`;
@@ -59,14 +60,23 @@ function popupNode(u: FleetUnit) {
     r.append(a, b);
     el.appendChild(r);
   }
+  if (u.fuel && u.fuel.alerts > 0) {
+    const link = document.createElement("a");
+    link.className = "tms-popup-alert";
+    link.href = `/fuel?unit=${encodeURIComponent(u.id)}`;
+    link.textContent = `${u.fuel.alerts} peringatan BBM - lihat riwayat`;
+    el.appendChild(link);
+  }
   return el;
 }
 
-export function FleetMap({ initial }: { initial: FleetSnapshot }) {
+export function FleetMap({ initial, focusId }: { initial: FleetSnapshot; focusId?: string }) {
   const [snap, setSnap] = useState(initial);
   const [filter, setFilter] = useState<UnitStatus | "ALL">("ALL");
   const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(() =>
+    focusId && initial.units.some((u) => u.id === focusId) ? focusId : null,
+  );
   const [live, setLive] = useState(true);
 
   const mapEl = useRef<HTMLDivElement>(null);
@@ -74,6 +84,7 @@ export function FleetMap({ initial }: { initial: FleetSnapshot }) {
   const markers = useRef(new Map<string, L.Marker>());
   const routeLine = useRef<L.Polyline | null>(null);
   const fitted = useRef(false);
+  const focused = useRef(false);
   const userMoved = useRef(false);
   const unitsRef = useRef<FleetUnit[]>(initial.units);
 
@@ -108,6 +119,10 @@ export function FleetMap({ initial }: { initial: FleetSnapshot }) {
 
     const markerMap = markers.current;
     return () => {
+      // Setel ulang penanda agar peta yang dibuat ulang (Strict Mode / remount) tetap pas-bingkai dan fokus dengan benar.
+      fitted.current = false;
+      focused.current = false;
+      userMoved.current = false;
       ro.disconnect();
       el.removeEventListener("pointerdown", touch);
       el.removeEventListener("wheel", touch);
@@ -183,6 +198,16 @@ export function FleetMap({ initial }: { initial: FleetSnapshot }) {
     }
   }, [visible, selected]);
 
+  // buka langsung unit tertentu (mis. dari halaman Monitoring BBM)
+  useEffect(() => {
+    if (!focusId || focused.current || !map.current) return;
+    const u = snap.units.find((x) => x.id === focusId);
+    if (!u) return;
+    focused.current = true;
+    userMoved.current = true; // jangan ditimpa pas-bingkai otomatis
+    map.current.flyTo([u.lat, u.lng], 10, { duration: 0.8 });
+  }, [focusId, snap.units]);
+
   // garis rute unit terpilih
   useEffect(() => {
     const m = map.current;
@@ -257,6 +282,11 @@ export function FleetMap({ initial }: { initial: FleetSnapshot }) {
                   </span>
                   <span className="text-muted-foreground block truncate text-xs">{u.driver} · {u.vehicleType}</span>
                   <span className="text-muted-foreground block truncate text-xs">{u.routeLabel}</span>
+                  {u.fuel && (
+                    <span className={cn("mt-0.5 flex items-center gap-1.5 text-xs", u.fuel.alerts > 0 ? "font-medium text-red-600" : "text-muted-foreground")}>
+                      <Fuel className="size-3" /> BBM {u.fuel.pct}%{u.fuel.alerts > 0 ? ` · ${u.fuel.alerts} peringatan` : ""}
+                    </span>
+                  )}
                 </span>
               </button>
             </li>

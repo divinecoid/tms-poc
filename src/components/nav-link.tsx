@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  Building2, ClipboardList, FileText, Handshake, Hourglass, IdCard, LayoutDashboard, MapPin, Route,
+  Building2, ClipboardList, FileText, Fuel, Handshake, Hourglass, IdCard, LayoutDashboard, MapPin, Route,
   MapPinned, TrendingUp, Truck, Wallet, type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 const icons: Record<string, LucideIcon> = {
   dashboard: LayoutDashboard, orders: ClipboardList, dispatch: Route, invoices: FileText, payables: Wallet,
   margin: TrendingUp, aging: Hourglass, customers: Building2, locations: MapPin, vehicles: Truck,
-  drivers: IdCard, vendors: Handshake, tracking: MapPinned,
+  drivers: IdCard, vendors: Handshake, tracking: MapPinned, fuel: Fuel,
 };
 
 export function NavLink({ href, label, icon }: { href: string; label: string; icon: string }) {
