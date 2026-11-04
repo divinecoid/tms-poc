@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,7 @@ export function DriverAdvance({ tripId, label }: { tripId: string; label: string
   return (
     <Button
       size="lg"
-      className="h-16 w-full text-lg"
+      className="h-16 w-full gap-2 text-lg"
       disabled={pending}
       onClick={() =>
         start(async () => {
@@ -21,7 +22,7 @@ export function DriverAdvance({ tripId, label }: { tripId: string; label: string
         })
       }
     >
-      {pending ? "Memproses…" : label}
+      {pending ? "Memproses…" : <>{label}<ArrowRight className="size-5" /></>}
     </Button>
   );
 }

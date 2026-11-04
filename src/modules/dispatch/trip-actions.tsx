@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -13,11 +14,12 @@ export function TripActions({ id, status, canSettle }: { id: string; status: str
   return (
     <div className="flex gap-2">
       {next && !blocked && (
-        <Button disabled={pending} onClick={() => start(async () => {
+        <Button className="gap-1.5" disabled={pending} onClick={() => start(async () => {
           const r = await advanceTrip(id);
           if (r.error) toast.error(r.error);
         })}>
-          → {statusLabel[next]}
+          {statusLabel[next]}
+          <ArrowRight className="size-4" />
         </Button>
       )}
       {status === "ASSIGNED" && (

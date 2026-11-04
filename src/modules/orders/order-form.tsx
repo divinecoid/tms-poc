@@ -1,5 +1,6 @@
 "use client";
 
+import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
@@ -104,7 +105,7 @@ export function OrderForm({ customers, locations }: { customers: Opt[]; location
                   <Input inputMode="numeric" value={s.pallets} onChange={(e) => patch(i, { pallets: e.target.value })} />
                 </div>
                 {stops.length > 2 && (
-                  <Button variant="ghost" size="sm" onClick={() => setStops((x) => x.filter((_, j) => j !== i))}>✕</Button>
+                  <Button variant="ghost" size="icon" aria-label="Hapus stop" onClick={() => setStops((x) => x.filter((_, j) => j !== i))}><X className="size-4" /></Button>
                 )}
               </div>
             </div>

@@ -9,7 +9,7 @@ async function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen">
       <Sidebar user={user} />
-      <main className="flex-1 overflow-x-auto p-6">{children}</main>
+      <main className="flex-1 overflow-x-auto bg-slate-50 p-8">{children}</main>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { MapPin, TriangleAlert } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type Pt = { lat: number; lng: number; speed?: number; ts: string };
@@ -54,11 +55,13 @@ export function GpsTracker({ tripId, active }: { tripId: string; active: boolean
   }, [tripId, active]);
 
   if (!active) return null;
+  const warn = state === "denied";
   return (
-    <p className="text-muted-foreground text-xs">
-      {state === "ok" && "📍 Lokasi aktif — dibagikan saat trip berjalan"}
-      {state === "denied" && "⚠️ Izin lokasi ditolak. Aktifkan lokasi agar trip bisa dilacak."}
-      {state === "off" && "📍 Menunggu sinyal lokasi…"}
+    <p className={`flex items-center gap-1.5 text-xs ${warn ? "text-amber-700" : "text-muted-foreground"}`}>
+      {warn ? <TriangleAlert className="size-3.5 shrink-0" /> : <MapPin className="size-3.5 shrink-0" />}
+      {state === "ok" && "Lokasi aktif, dibagikan saat trip berjalan"}
+      {state === "denied" && "Izin lokasi ditolak. Aktifkan lokasi agar trip bisa dilacak."}
+      {state === "off" && "Menunggu sinyal lokasi…"}
     </p>
   );
 }

@@ -1,3 +1,4 @@
+import { CheckCircle2 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -58,7 +59,7 @@ async function Content({ params }: { params: Promise<{ id: string }> }) {
                 ))}
                 {s.pod && (
                   <div className="mt-1 space-y-1">
-                    <p className="text-green-700">✓ POD: {s.pod.receiverName}</p>
+                    <p className="flex items-center justify-end gap-1.5 text-green-700"><CheckCircle2 className="size-4" />POD: {s.pod.receiverName}</p>
                     <div className="flex justify-end gap-1">
                       {s.pod.signatureKey && (
                         // eslint-disable-next-line @next/next/no-img-element

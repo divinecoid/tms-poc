@@ -1,3 +1,4 @@
+import { CheckCircle2, Package } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -34,7 +35,7 @@ async function Content({ params }: { params: Promise<{ id: string }> }) {
         <StatusBadge status={trip.status} />
       </div>
       <GpsTracker tripId={trip.id} active={tracking} />
-      {canAdvance && <DriverAdvance tripId={trip.id} label={`→ ${statusLabel[next]}`} />}
+      {canAdvance && <DriverAdvance tripId={trip.id} label={statusLabel[next]} />}
 
       <section className="space-y-3">
         <h2 className="font-semibold">Rute</h2>
@@ -45,11 +46,11 @@ async function Content({ params }: { params: Promise<{ id: string }> }) {
               <p className="text-muted-foreground">{s.address}</p>
               <p className="text-muted-foreground">{s.orderNo} · {s.customer}</p>
               {s.cargo.map((c) => (
-                <p key={c.id}>📦 {c.description}{c.weightKg && ` · ${Number(c.weightKg)} kg`}{c.cbm && ` · ${Number(c.cbm)} CBM`}</p>
+                <p key={c.id} className="flex items-center gap-1.5"><Package className="text-muted-foreground size-3.5" />{c.description}{c.weightKg && ` · ${Number(c.weightKg)} kg`}{c.cbm && ` · ${Number(c.cbm)} CBM`}</p>
               ))}
             </div>
             {s.type === "DROP" && s.pod && (
-              <p className="text-green-700">✓ POD diterima oleh {s.pod.receiverName}</p>
+              <p className="flex items-center gap-1.5 text-green-700"><CheckCircle2 className="size-4" />POD diterima oleh {s.pod.receiverName}</p>
             )}
             {s.type === "DROP" && !s.pod && trip.status === "AT_DROP" && <PodForm tripStopId={s.id} />}
           </div>
